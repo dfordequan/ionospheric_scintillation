@@ -162,13 +162,36 @@ while inputlist[i][1][0] == False and inputlist[i][1][1] == False and connection
 
 """
 # takes the list and interprets which duration, which freq. , etc. 
-for i in xx:  #xx - the list of the specific satellite
-    sdate = xx[0]  #start date
-    edate = xx[-1]   #end date
-    duration = (edate[5]-sdate[5]) + (edate[4]-sdate[4]*60 + (edate[3]-sdate[3]*3600))  #loss of lock duration in seconds
-    
+lol_lst = xxx   #list of all the lol of all the satellites [ each satellite[ each second[[datetime],[True,False]], .....   ]   loss of locking points only
+dur_lst = []  #a new list for storing duration and frequency
+for sat_num in lol_lst:  #for each satellite
+    sdate = sat_num[0][0] #start date
+    for i in range(len(sat_num)-1):
+        edate = sat_num[i][0] #end date is being keep updated
+        if int(sat_num[i+1][0][5]-sat_num[i][0][5]) != 1:  #if the time is not continous, it is the "end" of loss of connection
+            duration = (edate[5]-sdate[5]) + (edate[4]-sdate[4])*60 + (edate[3]-sdate[3])*3600 + (edate[2]-sdate[2])*3600*24 #calculating the duration (days to seconds)
+            if sat_num[i][-1] == [True,True]:  #if both frequency lost connection, store as [1,2]
+                freq = [1,2]
+            else:  #if one of the frequencies lost, find the index+1
+                freq = sat_num[i][-1].index(True)+1
+            dur_lst.append([freq,duration])
+            sdate = sat_num[i+1][0] #new start date
+print(dur_lst)
 
- """
+#Calculating the total time of loss of lock for each chanel
+L1 = 0
+L2 = =
+for i in dur_lst:
+    if type(i[0]) == "list":
+        L1 += i[1]
+        L2 += i[1]
+    elif i[0] == 1:
+        L1 += i[1]
+    else:
+        L2 +=i[1]
+print("Total lol time for L1=",L1)
+print("Total lol time for L2=",L2)
+
 
 
 
